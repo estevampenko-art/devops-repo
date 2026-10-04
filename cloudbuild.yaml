@@ -1,0 +1,18 @@
+steps:
+- name: 'gcr.io/cloud-builders/docker'
+  args: [ 'build', '-t', 'us-east4-docker.pkg.dev/$PROJECT_ID/devops-repo/hello-app:v1', '.' ]
+- name: 'gcr.io/cloud-builders/docker'
+  args: ['push', 'us-east4-docker.pkg.dev/$PROJECT_ID/devops-repo/hello-app:v1']
+- name: 'gcr.io/cloud-builders/gcloud'
+  args:
+  - 'run'
+  - 'deploy'
+  - 'hello-app'
+  - '--image'
+  - 'us-east4-docker.pkg.dev/$PROJECT_ID/devops-repo/hello-app:v1'
+  - '--region'
+  - 'us-east4'
+  - '--platform'
+  - 'managed'
+options:
+  logging: CLOUD_LOGGING_ONLY
